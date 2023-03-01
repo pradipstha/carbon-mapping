@@ -1,1 +1,1 @@
-# Entries for Kaggle Competetion 
+# Entries for Kaggle
