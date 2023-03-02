@@ -4829,17 +4829,7 @@ ggplot(titanic.full, aes(x = Age, fill = as.factor (Survived))) +
 
 ![](titanic_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
-\#Another Approach for Titanic Survival Prediction
-\#<https://www.kaggle.com/code/arunkumarramanan/data-science-in-r-and-titanic-survival-prediction>
-
-``` r
-# Load packages
-library('ggplot2') # visualization
-library('ggthemes') # visualization
-library('scales') # visualization
-```
-
-    ## Warning: package 'scales' was built under R version 4.1.3
+# Another Approach using Data Imputation 
 
 ``` r
 library('dplyr') # data manipulation
@@ -4884,7 +4874,6 @@ library('mice') # imputation
     ##     cbind, rbind
 
 ``` r
-library('randomForest') # classification algorithm
 library(VIM) #missing values visualization
 ```
 
@@ -4904,26 +4893,6 @@ library(VIM) #missing values visualization
     ## The following object is masked from 'package:datasets':
     ## 
     ##     sleep
-
-``` r
-# Bind training & test data
-str(titanic.full)
-```
-
-    ## 'data.frame':    1309 obs. of  13 variables:
-    ##  $ PassengerId: int  1 2 3 4 5 6 7 8 9 10 ...
-    ##  $ Survived   : int  0 1 1 1 0 0 0 0 1 1 ...
-    ##  $ Pclass     : Factor w/ 3 levels "1","2","3": 3 1 3 1 3 3 1 3 3 2 ...
-    ##  $ Name       : chr  "Braund, Mr. Owen Harris" "Cumings, Mrs. John Bradley (Florence Briggs Thayer)" "Heikkinen, Miss. Laina" "Futrelle, Mrs. Jacques Heath (Lily May Peel)" ...
-    ##  $ Sex        : Factor w/ 2 levels "female","male": 2 1 1 1 2 2 2 2 1 1 ...
-    ##  $ Age        : num  22 38 26 35 35 28 54 2 27 14 ...
-    ##  $ SibSp      : int  1 1 0 1 0 0 0 3 0 1 ...
-    ##  $ Parch      : int  0 0 0 0 0 0 0 1 2 0 ...
-    ##  $ Ticket     : chr  "A/5 21171" "PC 17599" "STON/O2. 3101282" "113803" ...
-    ##  $ Fare       : num  7.25 71.28 7.92 53.1 8.05 ...
-    ##  $ Cabin      : chr  "" "C85" "" "C123" ...
-    ##  $ Embarked   : Factor w/ 3 levels "C","Q","S": 3 1 3 3 3 2 3 3 3 1 ...
-    ##  $ IsTrainSet : logi  TRUE TRUE TRUE TRUE TRUE TRUE ...
 
 ``` r
 # Grab title from passenger names
@@ -5136,7 +5105,7 @@ legend('topright', colnames(rf_model$err.rate), col=1:3, fill=1:3)
 ![](titanic_files/figure-gfm/unnamed-chunk-31-1.png)<!-- -->
 
 ``` r
-# Get importance by plotting the mean decrease in Gini calculated across all trees
+# Mean decrease in Gini across all trees
 importance    <- importance(rf_model)
 varImportance <- data.frame(Variables = row.names(importance), 
                             Importance = round(importance[ ,'MeanDecreaseGini'],2))
@@ -5145,7 +5114,7 @@ varImportance <- data.frame(Variables = row.names(importance),
 rankImportance <- varImportance %>%
   mutate(Rank = paste0('#',dense_rank(desc(Importance))))
 
-# Use ggplot2 to visualize the relative importance of variables
+# Visualize the relative importance of variables
 ggplot(rankImportance, aes(x = reorder(Variables, Importance), 
     y = Importance, fill = Importance)) +
   geom_bar(stat='identity') + 
